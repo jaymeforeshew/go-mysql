@@ -62,6 +62,7 @@ type EventHeader struct {
 	ServerID  uint32
 	EventSize uint32
 	LogPos    uint32
+	LogFile   string
 	Flags     uint16
 }
 
@@ -93,6 +94,8 @@ func (h *EventHeader) Decode(data []byte) error {
 	if h.EventSize < uint32(EventHeaderSize) {
 		return errors.Errorf("invalid event size %d, must >= 19", h.EventSize)
 	}
+
+	h.LogFile = CurrentBinlogFile
 
 	return nil
 }

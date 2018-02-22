@@ -18,7 +18,8 @@ import (
 )
 
 var (
-	errSyncRunning = errors.New("Sync is running, must Close first")
+	errSyncRunning    = errors.New("Sync is running, must Close first")
+	CurrentBinlogFile string
 )
 
 // BinlogSyncerConfig is the configuration for BinlogSyncer.
@@ -675,6 +676,7 @@ func (b *BinlogSyncer) parseEvent(s *BinlogStreamer, data []byte) error {
 		b.nextPos.Name = string(event.NextLogName)
 		b.nextPos.Pos = uint32(event.Position)
 		log.Infof("rotate to %s", b.nextPos)
+		CurrentBinlogFile = b.nextPos.Name
 	case *GTIDEvent:
 		if !b.useGTID {
 			break
